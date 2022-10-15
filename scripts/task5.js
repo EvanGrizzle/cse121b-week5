@@ -4,13 +4,25 @@
 
 // Step 1: Declare and initialize a new variable to hold the current date
 
+let todayDate = new Date();
+
 // Step 2: Declare another variable to hold the day of the week
+
+let weekDay = todayDate.getDay();
 
 // Step 3: Using the variable declared in Step 1, assign the value of the variable declared in Step 2 to the day of the week ( hint: getDay() )
 
 // Step 4: Declare a variable to hold a message that will be displayed
 
+let message = '';
+
 // Step 5: Using an if statement, if the day of the week is a weekday (i.e. Monday - Friday), set the message variable to the string 'Hang in there!'
+
+if (weekDay == (1 || 2 || 3 || 4 || 5)) {
+    message = 'Hang in there!';
+} else {
+    message = 'Woohoo! It is the Weekend!';
+};
 
 // Step 6: Using an else statement, set the message variable to 'Woohoo!  It is the weekend!'
 
@@ -18,16 +30,48 @@
 
 // Step 1: Declare a new variable to hold another message
 
+let anotherMessage = '';
+
 // Step 2: Use switch, case and break to set the message variable to the day of the week as a string (e.g. Sunday, Monday, etc.) using the day of week variable declared in Step 2 above
+
+switch (weekDay) {
+    case 0:
+        anotherMessage = 'Sunday';
+        break;
+    case 1:
+        anotherMessage = 'Monday';
+        break;
+    case 2:
+        anotherMessage = 'Tuesday';
+        break;
+    case 3:
+        anotherMessage = 'Wednesday';
+        break;
+    case 4:
+        anotherMessage = 'Thursday';
+        break;
+    case 5:
+        anotherMessage = 'Friday';
+        break;
+    case 6:
+        anotherMessage = 'Saturday';
+        break;
+};
 
 /* OUTPUT */
 
 // Step 1: Assign the value of the first message variable to the HTML element with an ID of message1
 
+document.querySelector('#message1').textContent = message;
+
 // Step 2: Assign the value of the second message variable to the HTML element with an ID of message2
+
+document.querySelector('#message2').textContent = anotherMessage;
 
 /* FETCH */
 // Step 1: Declare a global empty array variable to store a list of temples
+
+let templesList = [];
 
 // Step 2: Declare a function named output that accepts a list of temples as an array argument and does the following for each temple:
 // - Creates an HTML <article> element
@@ -38,10 +82,36 @@
 // - Appends the <h3> element, the two <h4> elements, and the <img> element to the <article> element as children
 // - Appends the <article> element to the HTML element with an ID of temples
 
+function output(list) {
+    let articleElement = document.createElement('article');
+    let nameElement = document.createElement('h3');
+    let locationElement = document.createElement('h4');
+    let dedicationElement = document.createElement('h4');
+    let imgElement = document.createElement('img');
+
+    nameElement.textContent = list.templeName;
+    locationElement.textContent = list.location;
+    dedicationElement.textContent = list.dedicated;
+    imgElement.setAttribute("src", list.imageUrl);
+
+    articleElement.appendChild(nameElement, locationElement, dedicationElement, imgElement);
+    
+    let templeElement = document.getElementById('temples');
+    templeElement.appendChild(articleElement);
+};
+
 // Step 3: Create another function called getTemples. Make it an async function.
 // Step 4: In the function, using the built-in fetch method, call this absolute URL: 'https://byui-cse.github.io/cse121b-course/week05/temples.json'. Create a variable to hold the response from your fetch. You should have the program wait on this line until it finishes.
 // Step 5: Convert your fetch response into a Javascript object ( hint: .json() ). Store this in the templeList variable you declared earlier (Step 1). Make sure the the execution of the code waits here as well until it finishes.
 // Step 6: Finally, call the output function and pass it the list of temples. Execute your getTemples function to make sure it works correctly.
+
+async function getTemples() {
+    let response = await fetch('https://byui-cse.github.io/cse121b-course/week05/temples.json');
+    templesList =  await response.json();
+    output(templesList);
+};
+
+getTemples();
 
 // Step 7: Declare a function named reset that clears all of the <article> elements from the HTML element with an ID of temples
 
