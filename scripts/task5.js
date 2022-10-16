@@ -72,6 +72,7 @@ document.querySelector('#message2').textContent = anotherMessage;
 // Step 1: Declare a global empty array variable to store a list of temples
 
 let templesList = [];
+let sortedList = [];
 
 // Step 2: Declare a function named output that accepts a list of temples as an array argument and does the following for each temple:
 // - Creates an HTML <article> element
@@ -82,22 +83,29 @@ let templesList = [];
 // - Appends the <h3> element, the two <h4> elements, and the <img> element to the <article> element as children
 // - Appends the <article> element to the HTML element with an ID of temples
 
-function output(list) {
+const output = (templeslist) => {
+    templesList.forEach(temple => {
     let articleElement = document.createElement('article');
     let nameElement = document.createElement('h3');
     let locationElement = document.createElement('h4');
     let dedicationElement = document.createElement('h4');
     let imgElement = document.createElement('img');
+    let i = 0;
 
-    nameElement.textContent = list.templeName;
-    locationElement.textContent = list.location;
-    dedicationElement.textContent = list.dedicated;
-    imgElement.setAttribute("src", list.imageUrl);
+    nameElement.textContent = temple.templeName;
+    locationElement.textContent = temple.location;
+    dedicationElement.textContent = temple.dedicated;
+    imgElement.setAttribute("src", temple.imageUrl);
+    imgElement.setAttribute("alt", temple.templeName);
 
-    articleElement.appendChild(nameElement, locationElement, dedicationElement, imgElement);
+    articleElement.appendChild(nameElement);
+    articleElement.appendChild(locationElement);
+    articleElement.appendChild(dedicationElement);
+    articleElement.appendChild(imgElement);
     
     let templeElement = document.getElementById('temples');
     templeElement.appendChild(articleElement);
+    });
 };
 
 // Step 3: Create another function called getTemples. Make it an async function.
@@ -115,12 +123,47 @@ getTemples();
 
 // Step 7: Declare a function named reset that clears all of the <article> elements from the HTML element with an ID of temples
 
+function reset() {
+    let templeArticle = document.getElementById('temples');
+    while (templeArticle.firstChild) {
+        templeArticle.removeChild(templeArticle.firstChild);
+    }
+};
+
 // Step 8: Declare a function named sortBy that does the following:
 // - Calls the reset function
 // - Sorts the global temple list by the currently selected value of the HTML element with an ID of sortBy
 // - Calls the output function passing in the sorted list of temples
 
+const sortBy = (sortType) => {
+    reset();
+    if (sortType === 'templeNameAscending') {
+        sortedList = templesList.sort(function(a, b){
+            let x = a.templeName.toLowerCase();
+            let y = b.templeName.toLowerCase();
+            if (x < y) {return -1;}
+            if (x > y) {return 1;}
+            return 0;
+        });
+        output(sortedList);
+    } else if (sortType === 'templeNameDescending') {
+        sortedList = templesList.sort(function(a, b){
+            let x = a.templeName.toLowerCase();
+            let y = b.templeName.toLowerCase();
+            if (x > y) {return -1;}
+            if (x < y) {return 1;}
+            return 0;
+        });
+        output(sortedList);
+    };
+};
+
 // Step 9: Add a change event listener to the HTML element with an ID of sortBy that calls the sortBy function
+
+
+document.getElementById('sortBy').addEventListener('change', (e) => {
+    sortBy(e.target.value)
+});
 
 /* STRETCH */
 
