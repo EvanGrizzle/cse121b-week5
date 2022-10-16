@@ -114,8 +114,10 @@ const output = (templeslist) => {
 // Step 6: Finally, call the output function and pass it the list of temples. Execute your getTemples function to make sure it works correctly.
 
 async function getTemples() {
-    let response = await fetch('https://byui-cse.github.io/cse121b-course/week05/temples.json');
-    templesList =  await response.json();
+    const dataUrl = 'https://byui-cse.github.io/cse121b-course/week05/temples.json'
+    const response = await fetch(dataUrl);
+    const data = await response.json();
+    templesList = [data]
     output(templesList);
 };
 
